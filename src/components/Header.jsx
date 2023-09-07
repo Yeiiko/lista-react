@@ -1,9 +1,11 @@
-import { Text } from "@chakra-ui/react"
+import { Heading } from "@chakra-ui/react"
 
 export const Header = () =>{
     return(
-        <Text fontSize="70px" color="#fff" textAlign="center">
-                <h1>Task List</h1>
-        </Text>
-    )
-}
+        <Heading as="h1" color="#fff
+        " fontSize="50px" fontFamily="Caprasimo" bgGradient="linear-gradient(to right, #FFA8A8, #8FD3F4)"
+        backgroundClip="text"
+        fontWeight="bold">
+        Task List
+      </Heading>
+    )}
