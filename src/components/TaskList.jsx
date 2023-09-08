@@ -6,21 +6,20 @@ import {
   UnorderedList,
   Text,
   Stack,
+  FormErrorMessage,
+  FormControl
 } from "@chakra-ui/react";
 import { Task } from "./Task";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useTask } from "../Hooks/useTask";
 import {useEffect } from "react";
+import { useForm } from "react-hook-form";
 
 
 export const TaskList = () => {
   const {
     tasks,
-    newTask,
-    setNewTask,
-    newDescription,
-    setNewDescrip,
     taskCount,
     createTask,
     updateTask,
@@ -30,14 +29,15 @@ export const TaskList = () => {
     clearAll
   } = useTask();
  
-  
+  const {register,handleSubmit,formState:{errors,isValid},reset} = useForm({mode:"onChange"})
 
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
 
-  const handleAddTask = () => {
-    createTask();
+  const handleAddTask = (data) => {
+    createTask(data.newTask,data.newDescription);
+    reset();
   };
 
   const handleClearAll = () => {
@@ -55,27 +55,30 @@ export const TaskList = () => {
       padding="20px"
       boxShadow="1px 1px 1px rgba(0, 0, 0, 0.4), -1px -1px 1px rgba(0, 0, 0, 0.4)"
     >
+    <form onSubmit={handleSubmit(handleAddTask)}>
       <Stack w="300px" direction="row">
         <Stack>
-          <Input
+          <FormControl isInvalid={errors.newTask}>
+            <Input
             type="text"
-            value={newTask}
-            onChange={(e) => setNewTask(e.target.value)}
+            {...register("newTask",{
+              minLength:{
+              value: 3,
+              message:"The task is  very short"
+              }
+            })}
             placeholder="Add you new task"
             w="225px"
             borderColor="gray"
           />
+          <FormErrorMessage  role="alert">
+            {errors.newTask && errors.newTask.message}
+          </FormErrorMessage>
+          </FormControl>  
 
           <Input
             type="text"
-            value={newDescription}
-            onChange={(e) => setNewDescrip(e.target.value)}
-            w="225px"
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleAddTask;
-              }
-            }}
+            {...register("newDescription")}
             borderColor="gray"
             placeholder="Add your task description"
           />
@@ -83,7 +86,8 @@ export const TaskList = () => {
 
         <Flex justifyContent="flex-end">
           <Button
-            onClick={handleAddTask}
+            type="submit"
+            disabled={isValid}
             bg="#127DDB"
             display="inline-block"
             justifyContent="center"
@@ -100,7 +104,7 @@ export const TaskList = () => {
           </Button>
         </Flex>
       </Stack>
-
+</form>
       <div className="lista">
         <UnorderedList listStyleType="none">
           {tasks.map((task) => (

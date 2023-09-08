@@ -5,11 +5,6 @@ export const useTask = () => {
   const {
     editMode,
     tasks,
-    setTasks,
-    newTask,
-    setNewTask,
-    newDescription,
-    setNewDescrip,
     taskCount,
     setTaskCount,
     checked,
@@ -100,7 +95,7 @@ export const useTask = () => {
 
   const [state, dispatch] = useReducer(reducer, { tasks });
 
-  const createTask = () => {
+  const createTask = (newTask,newDescription) => {
     dispatch({
       type: "createTask",
       payload: {
@@ -110,8 +105,6 @@ export const useTask = () => {
         editMode,
       },
     });
-    setNewTask("");
-    setNewDescrip("");
     setTaskCount(taskCount + 1);
   };
 
@@ -150,11 +143,6 @@ export const useTask = () => {
 
   return {
     tasks: state.tasks,
-    newTask,
-    setNewTask,
-    setTasks,
-    newDescription,
-    setNewDescrip,
     taskCount,
     setTaskCount,
     createTask,

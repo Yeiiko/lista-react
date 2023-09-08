@@ -9,8 +9,6 @@ export const TaskProvider = ({ children }) => {
     return storedTasks ? JSON.parse(storedTasks) : [];
   });
 
-  const [newTask, setNewTask] = useState("");
-  const [newDescription, setNewDescrip] = useState("");
   const [taskCount, setTaskCount] = useState(() => {
     const pendingTasks = tasks.filter((task) => !task.status);
     return pendingTasks.length;
@@ -23,10 +21,6 @@ export const TaskProvider = ({ children }) => {
       value={{
         tasks,
         setTasks,
-        newTask,
-        setNewTask,
-        newDescription,
-        setNewDescrip,
         taskCount,
         setTaskCount,
         checked,
